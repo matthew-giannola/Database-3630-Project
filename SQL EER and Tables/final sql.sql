@@ -418,14 +418,14 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `final`;
-INSERT INTO `final`.`salaries` (`id`, `pay_wage`) VALUES (1, 22000);
-INSERT INTO `final`.`salaries` (`id`, `pay_wage`) VALUES (2, 21000);
-INSERT INTO `final`.`salaries` (`id`, `pay_wage`) VALUES (3, 21000);
-INSERT INTO `final`.`salaries` (`id`, `pay_wage`) VALUES (4, 23000);
-INSERT INTO `final`.`salaries` (`id`, `pay_wage`) VALUES (5, 24000);
-INSERT INTO `final`.`salaries` (`id`, `pay_wage`) VALUES (6, 21000);
-INSERT INTO `final`.`salaries` (`id`, `pay_wage`) VALUES (7, 20000);
-INSERT INTO `final`.`salaries` (`id`, `pay_wage`) VALUES (8, 19000);
+INSERT INTO `final`.`salaries` (`id`,` salary`) VALUES (1, 22000);
+INSERT INTO `final`.`salaries` (`id`,` salary`) VALUES (2, 21000);
+INSERT INTO `final`.`salaries` (`id`,` salary`) VALUES (3, 21000);
+INSERT INTO `final`.`salaries` (`id`,` salary`) VALUES (4, 23000);
+INSERT INTO `final`.`salaries` (`id`,` salary`) VALUES (5, 24000);
+INSERT INTO `final`.`salaries` (`id`,` salary`) VALUES (6, 21000);
+INSERT INTO `final`.`salaries` (`id`,` salary`) VALUES (7, 20000);
+INSERT INTO `final`.`salaries` (`id`,` salary`) VALUES (8, 19000);
 
 COMMIT;
 

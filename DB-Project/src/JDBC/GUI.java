@@ -56,17 +56,17 @@ public class GUI {
                 if(comboBox.getSelectedItem() == comboBox.getItemAt(0)) // select employees
                 {
                    textField1.setEnabled(true);
-                   textField1.setText("Insert ID");
+                   textField1.setText("Insert ID (ex: 10)");
                    textField2.setEnabled(true);
-                   textField2.setText("Insert name");
+                   textField2.setText("Insert name (ex: Bob)");
                    textField3.setEnabled(true);
-                   textField3.setText("Insert employee rank");
+                   textField3.setText("Insert employee rank (ex: 2)");
                    textField4.setEnabled(true);
-                   textField4.setText("Insert salary");
+                   textField4.setText("Insert salary (ex: 35000)");
                    textField5.setEnabled(true);
-                   textField5.setText("Insert shift start time");
+                   textField5.setText("Insert shift start time (ex: 2pm)");
                    textField6.setEnabled(true);
-                   textField6.setText("Insert shift end time");
+                   textField6.setText("Insert shift end time (ex: 10pm)");
                 }
                 else if(comboBox.getSelectedItem() == comboBox.getItemAt(1)) // select customers
                 {
@@ -144,24 +144,94 @@ public class GUI {
                     String shiftStartTime = textField5.getText();
                     String shiftEndTime = textField6.getText();
 
-                    // Insertion into employees looks something like this (this is an example only)
-                    String sql = "INSERT INTO employees VALUES(100, 1, 1, 1, 1, 'bob', 1)";
-
+                    // values: id, salary
                     String insertSalariesTbl = "INSERT INTO salaries VALUES(" + Integer.parseInt(id) +
                             ", " + Integer.parseInt(salary) + ")";
+
+                    // insert into shift start time, end time
+                    String insertShiftTbl = "INSERT INTO schedules VALUES(" + Integer.parseInt(id)+ ", '" +
+                            shiftStartTime + "', '" + shiftEndTime + "');";
+
+                    // insert employment table
+                    String insertEmpHistory = "INSERT INTO employment_history VALUES(" + Integer.parseInt(id)+
+                            ", NOW());";
+
+                    // Insertion into employees looks something like this (this is an example only)
+                    String sql = "INSERT INTO employees VALUES(100, 1, 1, 1, 1, 'bob', 1)";
+                    // insert into employee
+                    /* Employee rank system for the integers:
+                        1 - Manager
+                        2 - Food service worker
+                        3 - Cashier
+                    */
+                    // values: id, salary(fk), employee rank(fk), employee schedule(fk), employee history(fk), employee name
+                    String insertEmployeesTable = "INSERT INTO employees VALUES(" + Integer.parseInt(id) + // id
+                            ", " + Integer.parseInt(id) + // salary id
+                            ", " + Integer.parseInt(employeeRank) + // employee rank id, refer to chart
+                            ", " + Integer.parseInt(id) + // employee schedule id
+                            ", " + Integer.parseInt(id) + // employee history id
+                            ", '" + name + "');"; // employee name
+
 
 
 
                     try{
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection conn = DriverManager.getConnection(url, username, password);
-                        PreparedStatement pstmt = conn.prepareStatement(sql);
-                        pstmt.executeUpdate(insertSalariesTbl);
 
-                        // Delete this later on otherwise we will have too many popups because we need to insert into other
-                        // tables too, not just the salary table. This is just here for confirmation that the
-                        // insertion worked.
-                        JOptionPane.showMessageDialog(null, "Salary insertion done!");
+                        // Insert id, salary into salaries table
+                        PreparedStatement salaryInsert = conn.prepareStatement(sql);
+                        salaryInsert.executeUpdate(insertSalariesTbl);
+
+
+                        // Insert shift start and end time in schedules table
+                        PreparedStatement insertShiftTime = conn.prepareStatement(sql);
+                        insertShiftTime.executeUpdate(insertShiftTbl);
+
+                        // Insert current date into employment history table to mark the employee being hired
+                        // since they are being added to system currently
+                        PreparedStatement insertEmployeeHist = conn.prepareStatement(sql);
+                        insertEmployeeHist.executeUpdate(insertEmpHistory);
+
+
+                        // Insert employee into employee table
+                        PreparedStatement insertEmployee = conn.prepareStatement(sql);
+                        insertEmployee.executeUpdate(insertEmployeesTable);
+
+
+                        if(Integer.parseInt(employeeRank) == 1) // added a Manager
+                        {
+                            txtPaneOutput.setText(name + " was successfully added to the system as a Manager with an ID of " + id
+                                    + "! " + name + " will have a salary of " + salary + " and will have their shift start from "
+                            + shiftStartTime + " to " + shiftEndTime);
+                        }
+                        else if(Integer.parseInt(employeeRank) == 2) // added a Cook
+                        {
+                            txtPaneOutput.setText(name + " was successfully added to the system as a Cook with an ID of " + id
+                                    + "! " + name + " will have a salary of " + salary + " and will have their shift start from "
+                                    + shiftStartTime + " to " + shiftEndTime);
+                        }
+                        else if(Integer.parseInt(employeeRank) == 3) // added a cashier
+                        {
+                            txtPaneOutput.setText(name + " was successfully added to the system as a Cashier with an ID of " + id
+                                    + "! " + name + " will have a salary of " + salary + " and will have their shift start from "
+                                    + shiftStartTime + " to " + shiftEndTime);
+                        }
+                        else if(Integer.parseInt(employeeRank) == 4) // add a Server
+                        {
+                            txtPaneOutput.setText(name + " was successfully added to the system as a Server with an ID of " + id
+                                    + "! " + name + " will have a salary of " + salary + " and will have their shift start from "
+                                    + shiftStartTime + " to " + shiftEndTime);
+                        }
+                        else
+                        {
+                            txtPaneOutput.setText("Uh oh! Looks like an error was encountered, did you assign the correct employee rank? \n" +
+                                    "1. Manager \n" +
+                                    "2. Cook \n" +
+                                    "3. Cashier \n" +
+                                    "4. Server");
+                        }
+
 
                     }
                     catch(Exception ee){

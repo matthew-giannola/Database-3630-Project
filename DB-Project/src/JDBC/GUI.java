@@ -41,7 +41,7 @@ public class GUI {
     public GUI() throws Exception {
         String url = "jdbc:mysql://localhost:3306/final";
         String username = "root";
-        String password = "AsusAsus@Jake31"; // Insert your password here
+        String password = ""; // Insert your password here
 
         comboBox.addItem("None");
         comboBox.addItem("Employees");

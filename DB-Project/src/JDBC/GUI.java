@@ -6,13 +6,16 @@ package JDBC;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.*;
+import java.util.Objects;
+
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 public class GUI {
     private JPanel panelMain;
-    private JComboBox comboBox;
+    private JComboBox<String> comboBox;
     private JButton selectBtn;
     private JButton insertButton;
     private JButton deleteButton;
@@ -38,35 +41,50 @@ public class GUI {
     public GUI() throws Exception {
         String url = "jdbc:mysql://localhost:3306/final";
         String username = "root";
-        String password = ""; // Insert your password here
+        String password = "AsusAsus@Jake31"; // Insert your password here
 
-
+        comboBox.addItem("None");
         comboBox.addItem("Employees");
         comboBox.addItem("Customers");
-        comboBox.addItem("Items");
+        comboBox.addItem("Employee To Order");
 
-        selectBtn.addActionListener(new ActionListener()
+        selectBtn.setEnabled(false);
+        insertButton.setEnabled(false);
+        updateButton.setEnabled(false);
+        deleteButton.setEnabled(false);
+
+        comboBox.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                if(comboBox.getSelectedItem() == comboBox.getItemAt(0)) // select employees
+                if(comboBox.getSelectedItem() == comboBox.getItemAt(1)) // select employees
                 {
-                   textField1.setEnabled(true);
-                   textField1.setText("Insert ID (ex: 10)");
-                   textField2.setEnabled(true);
-                   textField2.setText("Insert name (ex: Bob)");
-                   textField3.setEnabled(true);
-                   textField3.setText("Insert employee rank (ex: 2)");
-                   textField4.setEnabled(true);
-                   textField4.setText("Insert salary (ex: 35000)");
-                   textField5.setEnabled(true);
-                   textField5.setText("Insert shift start time (ex: 2pm)");
-                   textField6.setEnabled(true);
-                   textField6.setText("Insert shift end time (ex: 10pm)");
+                    selectBtn.setEnabled(true);
+                    insertButton.setEnabled(true);
+                    updateButton.setEnabled(true);
+                    deleteButton.setEnabled(true);
+
+                    textField1.setEnabled(true);
+                    textField1.setText("Insert ID (ex: 10)");
+                    textField2.setEnabled(true);
+                    textField2.setText("Insert name (ex: Bob)");
+                    textField3.setEnabled(true);
+                    textField3.setText("Insert employee rank (ex: 2)");
+                    textField4.setEnabled(true);
+                    textField4.setText("Insert salary (ex: 35000)");
+                    textField5.setEnabled(true);
+                    textField5.setText("Insert shift start time (ex: 2pm)");
+                    textField6.setEnabled(true);
+                    textField6.setText("Insert shift end time (ex: 10pm)");
                 }
-                else if(comboBox.getSelectedItem() == comboBox.getItemAt(1)) // select customers
+                else if(comboBox.getSelectedItem() == comboBox.getItemAt(2)) // select customers
                 {
+                    selectBtn.setEnabled(true);
+                    insertButton.setEnabled(true);
+                    updateButton.setEnabled(true);
+                    deleteButton.setEnabled(true);
+
                     textField1.setEnabled(true);
                     textField1.setText("Insert customer ID");
                     textField2.setEnabled(true);
@@ -79,20 +97,24 @@ public class GUI {
                     textField5.setText("Insert combo quantity");
                     textField6.setEnabled(false);
                     textField6.setText("");
-
                 }
-                else if(comboBox.getSelectedItem() == comboBox.getItemAt(2)) // select items
+                else if(comboBox.getSelectedItem() == comboBox.getItemAt(3)) // select items
                 {
+                    selectBtn.setEnabled(true);
+                    insertButton.setEnabled(true);
+                    updateButton.setEnabled(true);
+                    deleteButton.setEnabled(true);
+
                     textField1.setEnabled(true);
-                    textField1.setText("Insert customer ID");
+                    textField1.setText("Insert employee ID (ex: 10)");
                     textField2.setEnabled(true);
-                    textField2.setText("Insert customer name");
-                    textField3.setEnabled(true);
-                    textField3.setText("Insert customer payment type");
-                    textField4.setEnabled(true);
-                    textField4.setText("Insert combo ID"); // used to get combo price, where price*quantity = total $
-                    textField5.setEnabled(true);
-                    textField5.setText("Insert combo quantity");
+                    textField2.setText("Insert Order ID (ex: 12)");
+                    textField3.setEnabled(false);
+                    textField3.setText("");
+                    textField4.setEnabled(false);
+                    textField4.setText("");
+                    textField5.setEnabled(false);
+                    textField5.setText("");
                     textField6.setEnabled(false);
                     textField6.setText("");
                 }
@@ -110,20 +132,89 @@ public class GUI {
                     textField5.setText("");
                     textField6.setEnabled(false);
                     textField6.setText("");
+
+                    // Disable Buttons
+                    selectBtn.setEnabled(false);
+                    insertButton.setEnabled(false);
+                    updateButton.setEnabled(false);
+                    deleteButton.setEnabled(false);
                     JOptionPane.showMessageDialog(null, "Error encountered.");
                 }
-
             }
         });
+
+
+        selectBtn.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                try {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    Connection conn = DriverManager.getConnection(url, username, password);
+                    Statement stmt = conn.createStatement();
+                    if(comboBox.getSelectedItem() == comboBox.getItemAt(1) ||
+                            comboBox.getSelectedItem() == comboBox.getItemAt(2)) // select employees
+                    {
+                        String input = textField1.getText();
+                        String table = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
+                        ResultSet rs = stmt.executeQuery("SELECT * FROM " + table + " WHERE id = " + input);
+                        ResultSetMetaData rs_md = rs.getMetaData();
+
+                        StringBuilder text = new StringBuilder();
+                        while(rs.next())
+                        {
+                            for (int i = 1; i <= rs_md.getColumnCount(); i++)
+                            {
+                                text.append(rs_md.getColumnName(i))
+                                        .append(": ")
+                                        .append(rs.getString(rs_md.getColumnName(i)))
+                                        .append(" ");
+                            }
+                            text.append("\n");
+                        }
+                        JOptionPane.showMessageDialog(null, text);
+                    }
+                    else if(comboBox.getSelectedItem() == comboBox.getItemAt(3)) // select employees
+                    {
+                        String input = textField1.getText();
+                        String table = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
+                        ResultSet rs = stmt.executeQuery("SELECT * FROM employees_has_orders WHERE employees_id = " + input);
+                        ResultSetMetaData rs_md = rs.getMetaData();
+
+                        StringBuilder text = new StringBuilder();
+                        while(rs.next())
+                        {
+                            for (int i = 1; i <= rs_md.getColumnCount(); i++)
+                            {
+                                text.append(rs_md.getColumnName(i))
+                                        .append(": ")
+                                        .append(rs.getString(rs_md.getColumnName(i)))
+                                        .append(" ");
+                            }
+                            text.append("\n");
+                        }
+                        JOptionPane.showMessageDialog(null, text);
+                    }
+
+                    conn.close();
+                }
+                catch (SQLException | ClassNotFoundException throwable)
+                {
+                    JOptionPane.showMessageDialog(null, "Please Enter a ID To Select");
+                }
+            }
+        });
+
         insertButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
 
-                  if(comboBox.getSelectedItem() == comboBox.getItemAt(0)) // select employees
+                if(comboBox.getSelectedItem() == comboBox.getItemAt(0)) // select employees
                 {
-                     /* TextField1 = ID (int)
+                    /* TextField1 = ID (int)
                      *  TextField2 = Name (string)
                      *  TextField3 = Employee Rank (string), check sql table for codes
                      *  TextField4 = Salary (int)
@@ -200,7 +291,7 @@ public class GUI {
                         {
                             txtPaneOutput.setText(name + " was successfully added to the system as a Manager with an ID of " + id
                                     + "! " + name + " will have a salary of " + salary + " and will have their shift start from "
-                            + shiftStartTime + " to " + shiftEndTime);
+                                    + shiftStartTime + " to " + shiftEndTime);
                         }
                         else if(Integer.parseInt(employeeRank) == 2) // added a Cook
                         {
@@ -309,6 +400,7 @@ public class GUI {
         JFrame frame = new JFrame("Restaurant Management System");
         frame.setPreferredSize(new Dimension(500, 500));
         frame.setContentPane(new GUI().panelMain);
+        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
     }

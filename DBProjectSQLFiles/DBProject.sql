@@ -304,6 +304,87 @@ COMMIT;
 
 
 -- -----------------------------------------------------
+-- Data for table `final`.`stock`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `final`;
+INSERT INTO `final`.`stock` (`id`, `cost`, `num_stock`, `vendor`) VALUES (id, cost, num_stock, vendor);
+INSERT INTO `final`.`stock` (`id`, `cost`, `num_stock`, `vendor`) VALUES (1, 2, 14, 1);
+INSERT INTO `final`.`stock` (`id`, `cost`, `num_stock`, `vendor`) VALUES (3, 2, 10, 1);
+INSERT INTO `final`.`stock` (`id`, `cost`, `num_stock`, `vendor`) VALUES (5, 2, 8, 1);
+INSERT INTO `final`.`stock` (`id`, `cost`, `num_stock`, `vendor`) VALUES (2, 4, 50, 2);
+INSERT INTO `final`.`stock` (`id`, `cost`, `num_stock`, `vendor`) VALUES (4, 5, 45, 2);
+INSERT INTO `final`.`stock` (`id`, `cost`, `num_stock`, `vendor`) VALUES (6, 6, 35, 3);
+INSERT INTO `final`.`stock` (`id`, `cost`, `num_stock`, `vendor`) VALUES (8, 3, 25, 3);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `final`.`drinks`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `final`;
+INSERT INTO `final`.`drinks` (`id`, `name`, `drink_size`, `stock_id`) VALUES (id, 'name', 'drink_size', stock_id);
+INSERT INTO `final`.`drinks` (`id`, `name`, `drink_size`, `stock_id`) VALUES (1, 'Coke', 'Small', 1);
+INSERT INTO `final`.`drinks` (`id`, `name`, `drink_size`, `stock_id`) VALUES (2, 'Coke', 'Large', 1);
+INSERT INTO `final`.`drinks` (`id`, `name`, `drink_size`, `stock_id`) VALUES (3, 'Sprite', 'Small', 3);
+INSERT INTO `final`.`drinks` (`id`, `name`, `drink_size`, `stock_id`) VALUES (4, 'Sprite', 'Large', 3);
+INSERT INTO `final`.`drinks` (`id`, `name`, `drink_size`, `stock_id`) VALUES (5, 'Water', 'Small', 5);
+INSERT INTO `final`.`drinks` (`id`, `name`, `drink_size`, `stock_id`) VALUES (6, 'Water', 'Large', 5);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `final`.`food`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `final`;
+INSERT INTO `final`.`food` (`id`, `food`, `stock_id`) VALUES (id, 'food', stock_id);
+INSERT INTO `final`.`food` (`id`, `food`, `stock_id`) VALUES (1, 'Burger', 2);
+INSERT INTO `final`.`food` (`id`, `food`, `stock_id`) VALUES (2, 'Chicken Strips', 4);
+INSERT INTO `final`.`food` (`id`, `food`, `stock_id`) VALUES (3, 'Burrito', 6);
+INSERT INTO `final`.`food` (`id`, `food`, `stock_id`) VALUES (4, 'Pancakes', 8);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `final`.`combos`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `final`;
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (id, drink, food, 'combos_name', combo_cost);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (1, 1, 1, 'Burger w/ Small Coke', 5);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (2, 2, 1, 'Burger w/ Large Coke', 6);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (3, 3, 1, 'Burger w/ Small Sprite', 5);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (4, 4, 1, 'Burger w/ Large Sprite', 6);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (5, 5, 1, 'Burger w/ Small Water', 5);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (6, 6, 1, 'Burger w/ Large Water', 6);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (7, 1, 2, 'Chicken Strips w/ Small Coke', 6);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (8, 2, 2, 'Chicken Strips w/ Large Coke', 7);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (9, 3, 2, 'Chicken Strips w/ Small Sprite', 6);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (10, 4, 2, 'Chicken Strips w/ Large Sprite', 7);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (11, 5, 2, 'Chicken Strips w/ Small Water', 6);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (12, 6, 2, 'Chicken Strips w/ Large Water', 7);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (13, 1, 3, 'Burrito w/ Small Coke', 7);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (14, 2, 3, 'Burrito w/ Large Coke', 8);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (15, 3, 3, 'Burrito w/ Small Sprite', 7);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (16, 4, 3, 'Burrito w/ Large SPrite', 8);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (17, 5, 3, 'Burrito w/ Small Water', 7);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (18, 6, 3, 'Burrito w/ Large Water', 8);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (19, 1, 4, 'Pancakes w/ Small Coke', 4);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (20, 2, 4, 'Pancakes w/ Large Coke', 5);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (21, 3, 4, 'Pancakes w/ Small Sprite', 4);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (22, 4, 4, 'Pancakes w/ Large Coke', 5);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (23, 5, 4, 'Pancakes w/ Small Water', 4);
+INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (24, 6, 4, 'Pancakes w/ Large Water', 5);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
 -- Data for table `final`.`employee_ranks`
 -- -----------------------------------------------------
 START TRANSACTION;

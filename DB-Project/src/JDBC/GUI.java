@@ -4,9 +4,6 @@
 
 package JDBC;
 
-import com.intellij.openapi.ui.messages.MessageDialog;
-import com.intellij.openapi.vcs.actions.ShowMessageHistoryAction;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -262,14 +259,38 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-              /* if() // check if name exists in the table
-               {
-                   JOptionPane.showMessageDialog(null, textField1.toString() + " was successfully deleted.");
-               }
-               else
+                String idText = textField1.getText();
+                if(idText.matches("\\d+[^a-zA-z]^[^a-zA-Z0-9]+$")) // check if name exists in the table
                 {
-                   JOptionPane.showMessageDialog(null, textField1.toString() + " was not found in the Database");
-                }*/
+                    try {
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        Connection conn = DriverManager.getConnection(url, username, password);
+                        String queryCheck = "SELECT id from Employees WHERE id = " + idText;
+                        String salaryDelete = "DELETE FROM salaries where id = " + idText;
+                        String delete = "DELETE FROM Employees WHERE id = " + idText;
+                        String deleteScheduleSql = "DELETE FROM Schedules WHERE id = " + idText;
+                        String deleteHistorysql = "DELETE FROM Employment_history WHERE id = " + idText;
+                        PreparedStatement checkEmployee = conn.prepareStatement(queryCheck);
+                        if(checkEmployee.executeUpdate(queryCheck) > 0 )
+                        {
+                            PreparedStatement deleteSalary = conn.prepareStatement(salaryDelete);
+                            deleteSalary.executeUpdate(salaryDelete);
+                            PreparedStatement deleteEmployee = conn.prepareStatement(delete);
+                            deleteEmployee.executeUpdate(delete);
+                            PreparedStatement deleteHistory = conn.prepareStatement(deleteScheduleSql);
+                            deleteHistory.executeUpdate(delete);
+                            PreparedStatement deleteSchedule = conn.prepareStatement(deleteHistorysql);
+                            deleteSchedule.executeUpdate(deleteHistorysql);
+                            conn.close();
+                        }
+                        else
+                            JOptionPane.showMessageDialog(null, textField1.toString() + "was not found input");
+                    } catch (SQLException | ClassNotFoundException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
+                else
+                    JOptionPane.showMessageDialog(null, textField1.toString() + "was not an acceptable input");
 
             }
         });

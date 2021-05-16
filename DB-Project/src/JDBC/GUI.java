@@ -212,7 +212,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e)
             {
 
-                if(comboBox.getSelectedItem() == comboBox.getItemAt(0)) // select employees
+                if(comboBox.getSelectedItem() == comboBox.getItemAt(1)) // select employees
                 {
                     /* TextField1 = ID (int)
                      *  TextField2 = Name (string)
@@ -328,12 +328,96 @@ public class GUI {
 
                 }
 
-                else if(comboBox.getSelectedItem() == comboBox.getItemAt(1)) // select customers
+                else if(comboBox.getSelectedItem() == comboBox.getItemAt(2)) // select customers
                 {
+                    /* TextField1 = ID (int)
+                     *  TextField2 = Name (string)
+                     *  TextField3 = Payment type (String)
+                     *  TextField4 = Combo ID (int)
+                     *  TextField5 = Combo Quantity (int)
+                     */
+
+                    // TO-DO: have to check if id exists and stop inserting if it does
+
+                    // id, salary, employee rank, employee schedule, employee history, employee name
+                    // FK = employee rank, salary, schedule, history-employement...
+                    String id = textField1.getText();
+                    String name = textField2.getText();
+                    String paymentType = textField3.getText();
+                    String comboID = textField4.getText();
+                    String comboQuantity = textField5.getText();
+
+                    // customer table takes in: id, name, payment type
+                    String insertCustomersTable = "INSERT INTO customers VALUES(" + Integer.parseInt(id) +
+                            ", '" + name + "', '" + paymentType + "');";
+
+
+
+                    try{
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        Connection conn = DriverManager.getConnection(url, username, password);
+                        Statement stmt = conn.createStatement();
+
+                        // Insert id, name, payment type
+                        PreparedStatement customerInsert = conn.prepareStatement(insertCustomersTable);
+                        customerInsert.executeUpdate(insertCustomersTable);
+
+
+
+                        ResultSet rs = stmt.executeQuery("SELECT combo_cost FROM combos WHERE id = " + Integer.parseInt(comboID));
+                        ResultSetMetaData rs_md = rs.getMetaData();
+                        StringBuilder combo_cost = new StringBuilder();
+
+                        while(rs.next())
+                        {
+                            for (int i = 1; i <= rs_md.getColumnCount(); i++)
+                            {
+                                combo_cost.append(rs.getString(rs_md.getColumnName(i)));
+                            }
+                        }
+                        rs.close();
+
+                        ResultSet rsName = stmt.executeQuery("SELECT combos_name FROM combos WHERE id = " + Integer.parseInt(comboID));
+                        ResultSetMetaData rs_mdName = rsName.getMetaData();
+                        StringBuilder combo_Name = new StringBuilder();
+
+                        while(rsName.next())
+                        {
+                            for (int i = 1; i <= rs_mdName.getColumnCount(); i++)
+                            {
+                                combo_Name.append(rsName.getString(rs_mdName.getColumnName(i)));
+
+                            }
+                        }
+                        rsName.close();
+                        String comboID_name = combo_Name.toString();
+
+
+                        double comboID_cost = Double.parseDouble(combo_cost.toString());
+                        double orderTotal = comboID_cost * Double.parseDouble(comboQuantity);
+
+
+                        // orders table takes in: id, total_cost, customer id, combo quantity
+                        String insertOrdersTable = "INSERT INTO orders VALUES(" + Integer.parseInt(id) +
+                                ", " + orderTotal + ", " + Integer.parseInt(id) + ", " + Integer.parseInt(comboQuantity) + ");";
+
+
+                        PreparedStatement ordersInsert = conn.prepareStatement(insertCustomersTable);
+                        ordersInsert.executeUpdate(insertOrdersTable);
+
+
+                        txtPaneOutput.setText(name + " has ordered successfully by paying with " + paymentType + "\n" +
+                                "They ordered " + comboQuantity + " " + comboID_name + " at a cost of $" + comboID_cost + " each. \n" +
+                                "This means that the total price is $" + orderTotal);
+
+                    }
+                    catch(Exception ee){
+                        JOptionPane.showMessageDialog(null, ee);
+                    }
 
                 }
 
-                else if(comboBox.getSelectedItem() == comboBox.getItemAt(2)) // select items
+                else if(comboBox.getSelectedItem() == comboBox.getItemAt(3)) // select items
                 {
 
                 }

@@ -41,7 +41,7 @@ public class GUI {
     public GUI() throws Exception {
         String url = "jdbc:mysql://localhost:3306/final";
         String username = "root";
-        String password = "realpass9"; // Insert your password here
+        String password = ""; // Insert your password here
 
         comboBox.addItem("None");
         comboBox.addItem("Employees");
@@ -97,26 +97,6 @@ public class GUI {
                     textField6.setEnabled(false);
                     textField6.setText("");
                 }
-                else if(comboBox.getSelectedItem() == comboBox.getItemAt(3)) // select items
-                {
-                    selectBtn.setEnabled(true);
-                    insertButton.setEnabled(true);
-                    updateButton.setEnabled(true);
-                    deleteButton.setEnabled(true);
-
-                    textField1.setEnabled(true);
-                    textField1.setText("Insert employee ID (ex: 10)");
-                    textField2.setEnabled(true);
-                    textField2.setText("Insert Order ID (ex: 12)");
-                    textField3.setEnabled(false);
-                    textField3.setText("");
-                    textField4.setEnabled(false);
-                    textField4.setText("");
-                    textField5.setEnabled(false);
-                    textField5.setText("");
-                    textField6.setEnabled(false);
-                    textField6.setText("");
-                }
                 else
                 {
                     textField1.setEnabled(false);
@@ -137,7 +117,6 @@ public class GUI {
                     insertButton.setEnabled(false);
                     updateButton.setEnabled(false);
                     deleteButton.setEnabled(false);
-                    JOptionPane.showMessageDialog(null, "Error encountered.");
                 }
             }
         });
@@ -152,12 +131,9 @@ public class GUI {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection conn = DriverManager.getConnection(url, username, password);
                     Statement stmt = conn.createStatement();
-                    if(comboBox.getSelectedItem() == comboBox.getItemAt(1))
-                    {
-                        JOptionPane.showMessageDialog(null, "Please select an option from the dropdown menu.");
-                    }
 
-                    else if(comboBox.getSelectedItem() == comboBox.getItemAt(2)) // select employees
+                    if(comboBox.getSelectedItem() == comboBox.getItemAt(1) || 
+                       comboBox.getSelectedItem() == comboBox.getItemAt(2))
                     {
                         String input = textField1.getText();
                         String table = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
@@ -176,7 +152,7 @@ public class GUI {
                             }
                             text.append("\n");
                         }
-                        JOptionPane.showMessageDialog(null, text);
+                        txtPaneOutput.setText(text.toString());
                     }
 
                     conn.close();

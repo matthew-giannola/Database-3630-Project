@@ -1,6 +1,6 @@
 /*TO DO BEFORE PASSING CODE:
-* 1. Delete password or error will encountered
-* 2. */
+ * 1. Delete password or error will encountered
+ * 2. */
 
 package JDBC;
 
@@ -41,7 +41,7 @@ public class GUI {
     public GUI() throws Exception {
         String url = "jdbc:mysql://localhost:3306/final";
         String username = "root";
-        String password = ""; // Insert your password here
+        String password = "realpass9"; // Insert your password here
 
         comboBox.addItem("None");
         comboBox.addItem("Employees");
@@ -411,104 +411,103 @@ public class GUI {
                 {
 
                     String idText = textField1.getText();
-                        try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection conn = DriverManager.getConnection(url, username, password);
-                            String queryCheck = "SELECT id from Employees WHERE id = " + idText;
-                            String salaryDelete = "DELETE FROM salaries where id = " + idText;
-                            String employeeDelete = "DELETE FROM Employees WHERE id = " + idText;
-                            String scheduleDelete = "DELETE FROM Schedules WHERE id = " + idText;
-                            String empHistoryDelete = "DELETE FROM Employment_history WHERE id = " + idText;
-                            PreparedStatement checkEmployee = conn.prepareStatement(queryCheck);
-                            if(checkEmployee.executeQuery().next())
+                    try {
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        Connection conn = DriverManager.getConnection(url, username, password);
+                        String queryCheck = "SELECT id from Employees WHERE id = " + idText;
+                        String salaryDelete = "DELETE FROM salaries where id = " + idText;
+                        String employeeDelete = "DELETE FROM Employees WHERE id = " + idText;
+                        String scheduleDelete = "DELETE FROM Schedules WHERE id = " + idText;
+                        String empHistoryDelete = "DELETE FROM Employment_history WHERE id = " + idText;
+                        PreparedStatement checkEmployee = conn.prepareStatement(queryCheck);
+                        if(checkEmployee.executeQuery().next())
+                        {
+                            Statement stmt = conn.createStatement();
+                            ResultSet rs = stmt.executeQuery("SELECT employee_name FROM Employees WHERE id = " + Integer.parseInt(idText));
+                            ResultSetMetaData rs_md = rs.getMetaData();
+                            StringBuilder employeeBuilder = new StringBuilder();
+                            while(rs.next())
                             {
-                                Statement stmt = conn.createStatement();
-                                ResultSet rs = stmt.executeQuery("SELECT employee_name FROM Employees WHERE id = " + Integer.parseInt(idText));
-                                ResultSetMetaData rs_md = rs.getMetaData();
-                                StringBuilder employeeBuilder = new StringBuilder();
-                                while(rs.next())
+                                for (int i = 1; i <= rs_md.getColumnCount(); i++)
                                 {
-                                    for (int i = 1; i <= rs_md.getColumnCount(); i++)
-                                    {
-                                        employeeBuilder.append(rs.getString(rs_md.getColumnName(i)));
-                                    }
+                                    employeeBuilder.append(rs.getString(rs_md.getColumnName(i)));
                                 }
-                                txtPaneOutput.setText(employeeBuilder.toString() +
-                                        " and all their data was deleted from the database.");
-
-                                PreparedStatement deleteSalary = conn.prepareStatement(salaryDelete);
-                                deleteSalary.executeUpdate(salaryDelete);
-
-                                PreparedStatement deleteEmployee = conn.prepareStatement(employeeDelete);
-                                deleteEmployee.executeUpdate(employeeDelete);
-
-                                PreparedStatement deleteSchedule = conn.prepareStatement(scheduleDelete);
-                                deleteSchedule.executeUpdate(scheduleDelete);
-
-                                PreparedStatement deleteHistory = conn.prepareStatement(empHistoryDelete);
-                                deleteHistory.executeUpdate(empHistoryDelete);
-                                rs.close();
                             }
-                            else
-                            {
-                                JOptionPane.showMessageDialog(null,
-                                        "There is no employee in the database with an ID of " + idText.toString());
-                            }
-                            conn.close();
-                        } catch (SQLException | ClassNotFoundException throwables) {
-                            JOptionPane.showMessageDialog(null, "Error encountered");
+                            txtPaneOutput.setText(employeeBuilder.toString() +
+                                    " and all their data was deleted from the database.");
+
+                            PreparedStatement deleteSalary = conn.prepareStatement(salaryDelete);
+                            deleteSalary.executeUpdate(salaryDelete);
+
+                            PreparedStatement deleteEmployee = conn.prepareStatement(employeeDelete);
+                            deleteEmployee.executeUpdate(employeeDelete);
+
+                            PreparedStatement deleteSchedule = conn.prepareStatement(scheduleDelete);
+                            deleteSchedule.executeUpdate(scheduleDelete);
+
+                            PreparedStatement deleteHistory = conn.prepareStatement(empHistoryDelete);
+                            deleteHistory.executeUpdate(empHistoryDelete);
+                            rs.close();
                         }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "There is no employee in the database with an ID of " + idText.toString());
+                        }
+                        conn.close();
+                    } catch (SQLException | ClassNotFoundException throwables) {
+                        JOptionPane.showMessageDialog(null, "Error encountered");
+                    }
                 }
                 else if(comboBox.getSelectedItem() == comboBox.getItemAt(2))
                 {
                     String idText = textField1.getText();
-                        try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection conn = DriverManager.getConnection(url, username, password);
-                            String queryCheck = "SELECT id from customers WHERE id = " + idText;
-                            String customerDelete = "DELETE FROM customers where id = " + idText;
-                            String delete = "DELETE FROM orders WHERE id = " + idText;
-                            PreparedStatement checkEmployee = conn.prepareStatement(queryCheck);
-                            if(checkEmployee.executeQuery().next())
+                    try {
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        Connection conn = DriverManager.getConnection(url, username, password);
+                        String queryCheck = "SELECT id from customers WHERE id = " + idText;
+                        String customerDelete = "DELETE FROM customers where id = " + idText;
+                        String delete = "DELETE FROM orders WHERE id = " + idText;
+                        PreparedStatement checkEmployee = conn.prepareStatement(queryCheck);
+                        if(checkEmployee.executeQuery().next())
+                        {
+                            Statement stmt = conn.createStatement();
+                            ResultSet rs = stmt.executeQuery("SELECT name FROM Customers WHERE id = " + Integer.parseInt(idText));
+                            ResultSetMetaData rs_md = rs.getMetaData();
+                            StringBuilder customerBuilder = new StringBuilder();
+                            while(rs.next())
                             {
-                                Statement stmt = conn.createStatement();
-                                ResultSet rs = stmt.executeQuery("SELECT name FROM Customers WHERE id = " + Integer.parseInt(idText));
-                                ResultSetMetaData rs_md = rs.getMetaData();
-                                StringBuilder customerBuilder = new StringBuilder();
-                                while(rs.next())
+                                for (int i = 1; i <= rs_md.getColumnCount(); i++)
                                 {
-                                    for (int i = 1; i <= rs_md.getColumnCount(); i++)
-                                    {
-                                        customerBuilder.append(rs.getString(rs_md.getColumnName(i)));
+                                    customerBuilder.append(rs.getString(rs_md.getColumnName(i)));
 
-                                    }
                                 }
-                                txtPaneOutput.setText(customerBuilder.toString() +
-                                        " and all their data was deleted from the database.");
-                                PreparedStatement deleteOrder = conn.prepareStatement(delete);
-                                deleteOrder.executeUpdate(delete);
-                                PreparedStatement deleteCustomer = conn.prepareStatement(customerDelete);
-                                deleteCustomer.executeUpdate(customerDelete);
-                                rs.close();
                             }
-                            else
-                            {
-                                JOptionPane.showMessageDialog(null,
-                                        "There is no customer in the database with an ID of " + idText.toString());
-                            }
-                            conn.close();
-
-                        } catch (SQLException | ClassNotFoundException throwables) {
-                            JOptionPane.showMessageDialog(null, "Error encountered");
+                            txtPaneOutput.setText(customerBuilder.toString() +
+                                    " and all their data was deleted from the database.");
+                            PreparedStatement deleteOrder = conn.prepareStatement(delete);
+                            deleteOrder.executeUpdate(delete);
+                            PreparedStatement deleteCustomer = conn.prepareStatement(customerDelete);
+                            deleteCustomer.executeUpdate(customerDelete);
+                            rs.close();
                         }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "There is no customer in the database with an ID of " + idText.toString());
+                        }
+                        conn.close();
+
+                    } catch (SQLException | ClassNotFoundException throwables) {
+                        JOptionPane.showMessageDialog(null, "Error encountered");
                     }
-                    else
-                        JOptionPane.showMessageDialog(null, textField1.toString() + "was not an acceptable input");
                 }
+                else
+                    JOptionPane.showMessageDialog(null, textField1.toString() + "was not an acceptable input");
+            }
         });
 
-        updateButton.addActionListener(new ActionListener()
-        {
+        updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e)
             {
@@ -528,7 +527,7 @@ public class GUI {
                             "', next_shift_end = '" + shiftEndTime + "' WHERE id = " + Integer.parseInt(id)
                             + ";";
 
-                    String sqlUpdateSalary = "UPDATE salaries SET salary = " + Integer.parseInt(salary) +
+                    String sqlUpdateSalary = "UPDATE salaries SET Salary = " + Integer.parseInt(salary) +
                             " WHERE id = " + Integer.parseInt(id) + ";";
 
                     String sqlUpdateEmployees = "UPDATE employees SET employee_rank = " + Integer.parseInt(rank)
@@ -554,7 +553,7 @@ public class GUI {
                         if(Integer.parseInt(rank) == 1) // added a Manager
                         {
                             txtPaneOutput.setText("The ID " + id + " has been updated. "
-                                     + name + " will have the position of Manager and have a salary of $"
+                                    + name + " will have the position of Manager and have a salary of $"
                                     + salary + " and will have their shift start from "
                                     + shiftStartTime + " to " + shiftEndTime);
                         }
@@ -592,18 +591,92 @@ public class GUI {
                     }
                     catch (Exception ex)
                     {
-                        JOptionPane.showMessageDialog(null, "Error encountered.");
+                        JOptionPane.showMessageDialog(null, ex);
+
+                    }
+
+
+
+
+                } else if (comboBox.getSelectedItem() == comboBox.getItemAt(2)) // customers
+                {
+                    String customer_id = textField1.getText();
+                    String customer_name = textField2.getText();
+                    String customer_payment = textField3.getText();
+                    String combo_id = textField4.getText();
+                    String combo_quantity = textField5.getText();
+                    double orderTotal = 0;
+                    // tables to update, Customer, and Combos
+
+                    try {
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        Connection conn = DriverManager.getConnection(url, username, password);
+                        Statement stmt = conn.createStatement();
+
+
+                        ResultSet rs = stmt.executeQuery("SELECT combo_cost FROM combos WHERE id = " + Integer.parseInt(combo_id));
+                        ResultSetMetaData rs_md = rs.getMetaData();
+                        StringBuilder combo_cost = new StringBuilder();
+
+                        while (rs.next()) {
+                            for (int i = 1; i <= rs_md.getColumnCount(); i++) {
+                                combo_cost.append(rs.getString(rs_md.getColumnName(i)));
+                            }
+                        }
+                        rs.close();
+
+                        ResultSet rsName = stmt.executeQuery("SELECT combos_name FROM combos WHERE id = " + Integer.parseInt(combo_id));
+                        ResultSetMetaData rs_mdName = rsName.getMetaData();
+                        StringBuilder combo_Name = new StringBuilder();
+
+                        while (rsName.next()) {
+                            for (int i = 1; i <= rs_mdName.getColumnCount(); i++) {
+                                combo_Name.append(rsName.getString(rs_mdName.getColumnName(i)));
+
+                            }
+                        }
+                        rsName.close();
+
+                        double comboID_cost = Double.parseDouble(combo_cost.toString());
+                        orderTotal = comboID_cost * Double.parseDouble(combo_quantity);
+
+                    } catch (Exception ee) {
+                        JOptionPane.showMessageDialog(null, ee);
+                    }
+
+
+                    String sqlUpdateCustomer = "UPDATE customers SET name = '" + customer_name +
+                            "', payment_type = '" + customer_payment + "' WHERE id = " + Integer.parseInt(customer_id)
+                            + ";";
+
+                    String sqlUpdateOrders = "UPDATE orders SET combo_quantity = " + Integer.parseInt(combo_quantity) +
+                            ", total_cost = " + orderTotal + " WHERE id = " + Integer.parseInt(customer_id)
+                            + ";";
+
+                    try {
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        Connection conn = DriverManager.getConnection(url, username, password);
+
+
+                        PreparedStatement salaryUpdate = conn.prepareStatement(sqlUpdateOrders);
+                        salaryUpdate.executeUpdate(sqlUpdateOrders);
+
+                        PreparedStatement schedulesUpdate = conn.prepareStatement(sqlUpdateCustomer);
+                        schedulesUpdate.executeUpdate(sqlUpdateCustomer);
+
+
+                        txtPaneOutput.setText("The ID " + customer_id + " has been updated. "
+                                + customer_name + " Will pay with " + customer_payment +
+                                " ordering " + combo_quantity + " of combo " + combo_id +
+                                " totaling: $" + orderTotal);
+
+
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, ex);
                     }
 
 
                 }
-                else if(comboBox.getSelectedItem() == comboBox.getItemAt(2)) // customers
-                {
-
-                }
-
-
-
             }
         });
     }

@@ -46,7 +46,6 @@ public class GUI {
         comboBox.addItem("None");
         comboBox.addItem("Employees");
         comboBox.addItem("Customers");
-        comboBox.addItem("Employee To Order");
 
         selectBtn.setEnabled(false);
         insertButton.setEnabled(false);
@@ -153,33 +152,16 @@ public class GUI {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection conn = DriverManager.getConnection(url, username, password);
                     Statement stmt = conn.createStatement();
-                    if(comboBox.getSelectedItem() == comboBox.getItemAt(1) ||
-                            comboBox.getSelectedItem() == comboBox.getItemAt(2)) // select employees
+                    if(comboBox.getSelectedItem() == comboBox.getItemAt(1))
+                    {
+                        JOptionPane.showMessageDialog(null, "Please select an option from the dropdown menu.");
+                    }
+
+                    else if(comboBox.getSelectedItem() == comboBox.getItemAt(2)) // select employees
                     {
                         String input = textField1.getText();
                         String table = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
                         ResultSet rs = stmt.executeQuery("SELECT * FROM " + table + " WHERE id = " + input);
-                        ResultSetMetaData rs_md = rs.getMetaData();
-
-                        StringBuilder text = new StringBuilder();
-                        while(rs.next())
-                        {
-                            for (int i = 1; i <= rs_md.getColumnCount(); i++)
-                            {
-                                text.append(rs_md.getColumnName(i))
-                                        .append(": ")
-                                        .append(rs.getString(rs_md.getColumnName(i)))
-                                        .append(" ");
-                            }
-                            text.append("\n");
-                        }
-                        JOptionPane.showMessageDialog(null, text);
-                    }
-                    else if(comboBox.getSelectedItem() == comboBox.getItemAt(3)) // select employees
-                    {
-                        String input = textField1.getText();
-                        String table = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
-                        ResultSet rs = stmt.executeQuery("SELECT * FROM employees_has_orders WHERE employees_id = " + input);
                         ResultSetMetaData rs_md = rs.getMetaData();
 
                         StringBuilder text = new StringBuilder();
@@ -221,8 +203,6 @@ public class GUI {
                      *  TextField5 = Shift start time
                      *  TextField6 = Shift end time */
 
-                    // TO-DO: have to check if id exists and stop inserting if it does
-
                     // id, salary, employee rank, employee schedule, employee history, employee name
                     // FK = employee rank, salary, schedule, history-employement...
                     String id = textField1.getText();
@@ -244,8 +224,7 @@ public class GUI {
                     String insertEmpHistory = "INSERT INTO employment_history VALUES(" + Integer.parseInt(id)+
                             ", NOW());";
 
-                    // Insertion into employees looks something like this (this is an example only)
-                    String sql = "INSERT INTO employees VALUES(100, 1, 1, 1, 1, 'bob', 1)";
+
                     // insert into employee
                     /* Employee rank system for the integers:
                         1 - Manager
@@ -268,47 +247,47 @@ public class GUI {
                         Connection conn = DriverManager.getConnection(url, username, password);
 
                         // Insert id, salary into salaries table
-                        PreparedStatement salaryInsert = conn.prepareStatement(sql);
+                        PreparedStatement salaryInsert = conn.prepareStatement(insertSalariesTbl);
                         salaryInsert.executeUpdate(insertSalariesTbl);
 
 
                         // Insert shift start and end time in schedules table
-                        PreparedStatement insertShiftTime = conn.prepareStatement(sql);
+                        PreparedStatement insertShiftTime = conn.prepareStatement(insertShiftTbl);
                         insertShiftTime.executeUpdate(insertShiftTbl);
 
                         // Insert current date into employment history table to mark the employee being hired
                         // since they are being added to system currently
-                        PreparedStatement insertEmployeeHist = conn.prepareStatement(sql);
+                        PreparedStatement insertEmployeeHist = conn.prepareStatement(insertEmpHistory);
                         insertEmployeeHist.executeUpdate(insertEmpHistory);
 
 
                         // Insert employee into employee table
-                        PreparedStatement insertEmployee = conn.prepareStatement(sql);
+                        PreparedStatement insertEmployee = conn.prepareStatement(insertEmployeesTable);
                         insertEmployee.executeUpdate(insertEmployeesTable);
 
 
                         if(Integer.parseInt(employeeRank) == 1) // added a Manager
                         {
                             txtPaneOutput.setText(name + " was successfully added to the system as a Manager with an ID of " + id
-                                    + "! " + name + " will have a salary of " + salary + " and will have their shift start from "
+                                    + "! " + name + " will have a salary of $" + salary + " and will have their shift start from "
                                     + shiftStartTime + " to " + shiftEndTime);
                         }
                         else if(Integer.parseInt(employeeRank) == 2) // added a Cook
                         {
                             txtPaneOutput.setText(name + " was successfully added to the system as a Cook with an ID of " + id
-                                    + "! " + name + " will have a salary of " + salary + " and will have their shift start from "
+                                    + "! " + name + " will have a salary of $" + salary + " and will have their shift start from "
                                     + shiftStartTime + " to " + shiftEndTime);
                         }
                         else if(Integer.parseInt(employeeRank) == 3) // added a cashier
                         {
                             txtPaneOutput.setText(name + " was successfully added to the system as a Cashier with an ID of " + id
-                                    + "! " + name + " will have a salary of " + salary + " and will have their shift start from "
+                                    + "! " + name + " will have a salary of $" + salary + " and will have their shift start from "
                                     + shiftStartTime + " to " + shiftEndTime);
                         }
                         else if(Integer.parseInt(employeeRank) == 4) // add a Server
                         {
                             txtPaneOutput.setText(name + " was successfully added to the system as a Server with an ID of " + id
-                                    + "! " + name + " will have a salary of " + salary + " and will have their shift start from "
+                                    + "! " + name + " will have a salary of $" + salary + " and will have their shift start from "
                                     + shiftStartTime + " to " + shiftEndTime);
                         }
                         else
@@ -336,8 +315,6 @@ public class GUI {
                      *  TextField4 = Combo ID (int)
                      *  TextField5 = Combo Quantity (int)
                      */
-
-                    // TO-DO: have to check if id exists and stop inserting if it does
 
                     // id, salary, employee rank, employee schedule, employee history, employee name
                     // FK = employee rank, salary, schedule, history-employement...
@@ -417,10 +394,6 @@ public class GUI {
 
                 }
 
-                else if(comboBox.getSelectedItem() == comboBox.getItemAt(3)) // select items
-                {
-
-                }
 
                 else
                 {
@@ -539,6 +512,97 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                String id = textField1.getText();
+                String name = textField2.getText();
+                String rank = textField3.getText();
+                String salary = textField4.getText();
+                String shiftStartTime = textField5.getText();
+                String shiftEndTime = textField6.getText();
+
+                // tables to update, salaries, schedules, employement history, employees
+
+
+                if(comboBox.getSelectedItem() == comboBox.getItemAt(1)) // employees
+                {
+                    String sqlUpdateSchedule = "UPDATE schedules SET next_shift_start = '" + shiftStartTime +
+                            "', next_shift_end = '" + shiftEndTime + "' WHERE id = " + Integer.parseInt(id)
+                            + ";";
+
+                    String sqlUpdateSalary = "UPDATE salaries SET salary = " + Integer.parseInt(salary) +
+                            " WHERE id = " + Integer.parseInt(id) + ";";
+
+                    String sqlUpdateEmployees = "UPDATE employees SET employee_rank = " + Integer.parseInt(rank)
+                            +
+                            ", employee_name = '" + name + "' WHERE id = " + Integer.parseInt(id) + ";";
+                    // since salary and shift are foreign keys, employees table should update, nothing else is needed
+
+
+                    try {
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        Connection conn = DriverManager.getConnection(url, username, password);
+
+
+                        PreparedStatement salaryUpdate = conn.prepareStatement(sqlUpdateSalary);
+                        salaryUpdate.executeUpdate(sqlUpdateSalary);
+
+                        PreparedStatement schedulesUpdate = conn.prepareStatement(sqlUpdateSchedule);
+                        schedulesUpdate.executeUpdate(sqlUpdateSchedule);
+
+                        PreparedStatement employeeUpdate = conn.prepareStatement(sqlUpdateEmployees);
+                        employeeUpdate.executeUpdate(sqlUpdateEmployees);
+
+                        if(Integer.parseInt(rank) == 1) // added a Manager
+                        {
+                            txtPaneOutput.setText("The ID " + id + " has been updated. "
+                                     + name + " will have the position of Manager and have a salary of $"
+                                    + salary + " and will have their shift start from "
+                                    + shiftStartTime + " to " + shiftEndTime);
+                        }
+                        else if(Integer.parseInt(rank) == 2) // added a Cook
+                        {
+                            txtPaneOutput.setText("The ID " + id + " has been updated. "
+                                    + name + " will have the position of Cook and have a salary of $"
+                                    + salary + " and will have their shift start from "
+                                    + shiftStartTime + " to " + shiftEndTime);
+                        }
+                        else if(Integer.parseInt(rank) == 3) // added a cashier
+                        {
+                            txtPaneOutput.setText("The ID " + id + " has been updated. "
+                                    + name + " will have the position of Cashier and have a salary of $"
+                                    + salary + " and will have their shift start from "
+                                    + shiftStartTime + " to " + shiftEndTime);
+                        }
+                        else if(Integer.parseInt(rank) == 4) // add a Server
+                        {
+                            txtPaneOutput.setText("The ID " + id + " has been updated. "
+                                    + name + " will have the position of Server and have a salary of $"
+                                    + salary + " and will have their shift start from "
+                                    + shiftStartTime + " to " + shiftEndTime);
+                        }
+                        else
+                        {
+                            txtPaneOutput.setText("Uh oh! Looks like an error was encountered, did you assign the correct employee rank? \n" +
+                                    "1. Manager \n" +
+                                    "2. Cook \n" +
+                                    "3. Cashier \n" +
+                                    "4. Server");
+                        }
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        JOptionPane.showMessageDialog(null, "Error encountered.");
+                    }
+
+
+                }
+                else if(comboBox.getSelectedItem() == comboBox.getItemAt(2)) // customers
+                {
+
+                }
+
+
 
             }
         });

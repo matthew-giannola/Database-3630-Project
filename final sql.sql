@@ -356,7 +356,6 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `final`;
-INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (id, drink, food, 'combos_name', combo_cost);
 INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (1, 1, 1, 'Burger 1', 5);
 INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (2, 2, 1, 'Burger 2', 6);
 INSERT INTO `final`.`combos` (`id`, `drink`, `food`, `combos_name`, `combo_cost`) VALUES (3, 3, 1, 'Burger 3', 5);
@@ -420,7 +419,6 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `final`;
-INSERT INTO `final`.`salaries` (`id`, `pay_week`, `pay_wage`) VALUES (id, 'pay_week', pay_wage);
 INSERT INTO `final`.`salaries` (`id`, `pay_week`, `pay_wage`) VALUES (1, '2021-05-20', 12.00);
 INSERT INTO `final`.`salaries` (`id`, `pay_week`, `pay_wage`) VALUES (2, '2021-05-20', 10.00);
 INSERT INTO `final`.`salaries` (`id`, `pay_week`, `pay_wage`) VALUES (3, '2021-05-20', 10.00);

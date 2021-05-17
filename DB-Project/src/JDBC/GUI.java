@@ -436,19 +436,18 @@ public class GUI {
             {
                 if(comboBox.getSelectedItem() == comboBox.getItemAt(1))
                 {
+
                     String idText = textField1.getText();
-                    if(idText.matches("\\d+[^a-zA-z]^[^a-zA-Z0-9]+$")) // check if name exists in the table
-                    {
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             Connection conn = DriverManager.getConnection(url, username, password);
                             String queryCheck = "SELECT id from Employees WHERE id = " + idText;
                             String salaryDelete = "DELETE FROM salaries where id = " + idText;
-                            String delete = "DELETE FROM Employees WHERE id = " + idText;
-                            String deleteScheduleSql = "DELETE FROM Schedules WHERE id = " + idText;
-                            String deleteHistorysql = "DELETE FROM Employment_history WHERE id = " + idText;
+                            String employeeDelete = "DELETE FROM Employees WHERE id = " + idText;
+                            String scheduleDelete = "DELETE FROM Schedules WHERE id = " + idText;
+                            String empHistoryDelete = "DELETE FROM Employment_history WHERE id = " + idText;
                             PreparedStatement checkEmployee = conn.prepareStatement(queryCheck);
-                            if(checkEmployee.executeUpdate(queryCheck) > 0 )
+                            if(checkEmployee.executeQuery().next())
                             {
                                 Statement stmt = conn.createStatement();
                                 ResultSet rs = stmt.executeQuery("SELECT employee_name FROM Employees WHERE id = " + Integer.parseInt(idText));
@@ -459,36 +458,37 @@ public class GUI {
                                     for (int i = 1; i <= rs_md.getColumnCount(); i++)
                                     {
                                         employeeBuilder.append(rs.getString(rs_md.getColumnName(i)));
-
                                     }
                                 }
-                                employeeBuilder.append(" was deleted");
-                                JOptionPane.showMessageDialog(null, employeeBuilder.toString());
+                                txtPaneOutput.setText(employeeBuilder.toString() +
+                                        " and all their data was deleted from the database.");
+
                                 PreparedStatement deleteSalary = conn.prepareStatement(salaryDelete);
                                 deleteSalary.executeUpdate(salaryDelete);
-                                PreparedStatement deleteEmployee = conn.prepareStatement(delete);
-                                deleteEmployee.executeUpdate(delete);
-                                PreparedStatement deleteHistory = conn.prepareStatement(deleteScheduleSql);
-                                deleteHistory.executeUpdate(delete);
-                                PreparedStatement deleteSchedule = conn.prepareStatement(deleteHistorysql);
-                                deleteSchedule.executeUpdate(deleteHistorysql);
+
+                                PreparedStatement deleteEmployee = conn.prepareStatement(employeeDelete);
+                                deleteEmployee.executeUpdate(employeeDelete);
+
+                                PreparedStatement deleteSchedule = conn.prepareStatement(scheduleDelete);
+                                deleteSchedule.executeUpdate(scheduleDelete);
+
+                                PreparedStatement deleteHistory = conn.prepareStatement(empHistoryDelete);
+                                deleteHistory.executeUpdate(empHistoryDelete);
                                 rs.close();
                             }
                             else
-                                JOptionPane.showMessageDialog(null, textField1.toString() + "was not found input");
+                            {
+                                JOptionPane.showMessageDialog(null,
+                                        "There is no employee in the database with an ID of " + idText.toString());
+                            }
                             conn.close();
                         } catch (SQLException | ClassNotFoundException throwables) {
-                            throwables.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Error encountered");
                         }
-                    }
-                    else
-                        JOptionPane.showMessageDialog(null, textField1.toString() + "was not an acceptable input");
                 }
                 else if(comboBox.getSelectedItem() == comboBox.getItemAt(2))
                 {
                     String idText = textField1.getText();
-                    if(idText.matches("\\d+[^a-zA-z]^[^a-zA-Z0-9]+$")) // check if name exists in the table
-                    {
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             Connection conn = DriverManager.getConnection(url, username, password);
@@ -496,7 +496,7 @@ public class GUI {
                             String customerDelete = "DELETE FROM customers where id = " + idText;
                             String delete = "DELETE FROM orders WHERE id = " + idText;
                             PreparedStatement checkEmployee = conn.prepareStatement(queryCheck);
-                            if(checkEmployee.executeUpdate(queryCheck) > 0 )
+                            if(checkEmployee.executeQuery().next())
                             {
                                 Statement stmt = conn.createStatement();
                                 ResultSet rs = stmt.executeQuery("SELECT name FROM Customers WHERE id = " + Integer.parseInt(idText));
@@ -510,8 +510,8 @@ public class GUI {
 
                                     }
                                 }
-                                customerBuilder.append(" was deleted");
-                                JOptionPane.showMessageDialog(null, customerBuilder.toString());
+                                txtPaneOutput.setText(customerBuilder.toString() +
+                                        " and all their data was deleted from the database.");
                                 PreparedStatement deleteOrder = conn.prepareStatement(delete);
                                 deleteOrder.executeUpdate(delete);
                                 PreparedStatement deleteCustomer = conn.prepareStatement(customerDelete);
@@ -519,17 +519,19 @@ public class GUI {
                                 rs.close();
                             }
                             else
-                                JOptionPane.showMessageDialog(null, textField1.toString() + "was not found input");
+                            {
+                                JOptionPane.showMessageDialog(null,
+                                        "There is no customer in the database with an ID of " + idText.toString());
+                            }
                             conn.close();
 
                         } catch (SQLException | ClassNotFoundException throwables) {
-                            throwables.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Error encountered");
                         }
                     }
                     else
                         JOptionPane.showMessageDialog(null, textField1.toString() + "was not an acceptable input");
                 }
-            }
         });
 
         updateButton.addActionListener(new ActionListener()
